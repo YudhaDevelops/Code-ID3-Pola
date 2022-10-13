@@ -6,85 +6,87 @@ Created on Thu Oct  6 23:50:43 2022
 """
 import pandas as pd # for manipulating the csv data
 
-data_test = pd.read_csv("dataMangga2.csv")
+data_test = pd.read_csv("dataMangga.csv")
 
 
 jum_data_test = data_test.shape[0]
 
-hasil = [];
+hasil = []
+prediksi = []
+
 def klasifikasi(bentuk, warnaDaun, lebar, teksDaun, tulDaun):
     
     if bentuk == 1:
-        hasil.append("Daun Sirih")
-        print("Daun Sirih")
+        hasil.append("Sirih")
     elif bentuk == 8:
-        hasil.append("Daun Singkong")
-        print("Daun Singkong")
+        hasil.append("Singkong")
     elif bentuk == 11 :
-        hasil.append("Daun Paku")
-        print("Daun Paku")
+        hasil.append("Paku")
     elif bentuk == 15 :
-        hasil.append("Daun Nangka")
-        print("Daun Nangka")
+        hasil.append("Nangka")
     elif bentuk == 17 :
-        hasil.append("Daun Ketapang")
-        print("Daun Ketapang")
+        hasil.append("Ketapang")
     elif bentuk == 23 :
-        hasil.append("Daun Palem")
-        print("Daun Palem")
+        hasil.append("Palem")
     elif bentuk == 3 :
         if  warnaDaun == 1 :
-            hasil.append("Daun Bayam Liar")
-            print("Daun Bayam Liar")
+            hasil.append("Bayam Liar")
         elif warnaDaun == 2 :
-            hasil.append("Daun Zamioculcas")
-            print("Daun Zamioculcas")
+            hasil.append("Zamioculcas")
         else:
             hasil.append('Data Tidak Dikenali')
-            print('Data Tidak Dikenali')
     elif bentuk == 4 :
         if teksDaun == 0 :
             hasil.append("Kamboja")
-            print("Kamboja")
         elif teksDaun == 2 :
             hasil.append("Rambutan")
-            print("Rambutan")
         else:
             hasil.append('Data Tidak Dikenali')
-            print('Data Tidak Dikenali')
     elif bentuk == 6 :
         if lebar == 1 or lebar == 3 :
-            hasil.append("Daun Jambu")
-            print("Daun Jambu")
+            hasil.append("Jambu")
         elif lebar == 2 :
             if tulDaun == 0 :
                 hasil.append("Tanjung")
-                print("Tanjung")
             elif tulDaun == 1 :
-                hasil.append("Daun Jambu")
-                print("Daun Jambu")
+                hasil.append("Jambu")
             else:
-                print('Data Tidak Dikenali')
+                hasil.append('Data Tidak Dikenali')
         elif lebar == 4 or lebar == 5 :
             hasil.append("Mangga")
-            print("Mangga")
         else:
             hasil.append('Data Tidak Dikenali')
-            print('Data Tidak Dikenali')
     elif bentuk == 18 :
         if tulDaun == 0 :
             hasil.append("SunFlower")
-            print("SunFlower")
         elif tulDaun == 2:
-            hasil.append("Bambu");
-            print("Daun Bambu")
+            hasil.append("Bambu")
         else:
             hasil.append("Daun tidak dikenali")
-            print("Daun tidak dikenali")
     else:
-        print('Data Tidak Dikenali')
-        hasil.append('Data Tidak Dikenali')
-        
+        hasil.append("Daun tidak dikenali")
+
+def cariPred(tabelDaunPred, daunPred):
+    jum_data_daun = len(tabelDaunPred)
+    
+    for i in range(0,jum_data_daun):
+        if(tabelDaunPred[i] == daunPred):
+            prediksi.append("True")
+        else:
+            prediksi.append("False")
+
+def hitungPred(tabelPred):
+    jumBenar = 0
+    jum_data_pred = len(tabelPred)
+    
+    for i in range(0,jum_data_pred):
+        if(tabelPred[i] == "True"):
+            jumBenar=jumBenar+1
+    
+    akurasi = (jumBenar / jum_data_pred)*100
+    
+    return akurasi
+    
 
 for i in range(0,jum_data_test):
     test1 = data_test['warna']
@@ -101,8 +103,13 @@ for i in range(0,jum_data_test):
     
     test5 = data_test['Tulang Daun']
     test_tulDaun = test5[i]
-    klasifikasi(test_bentuk, test_warna, test_lebar, test_teksDaun, test_tulDaun)
+    klasifikasi(test_bentuk, test_warna, test_lebar, test_teksDaun, 
+                test_tulDaun)
     
     
 data_test["Hasil Akhir"] = hasil
-#print(data_test)
+cariPred(hasil, "Mangga")
+data_test["Prediksi"] = prediksi
+
+akurasiPred_1=hitungPred(prediksi)
+print("Hasil Perhitungan Akurasi Rule : ", akurasiPred_1)
